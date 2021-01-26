@@ -19,7 +19,8 @@ def create_model():
     model.add( Conv2D( filters = 128, kernel_size = (3,3), activation = "relu") )
     model.add( MaxPool2D(pool_size = (2,2)))
     model.add( Flatten())
-    model.add( Dense( units = 10,activation = "softmax"))
+    model.add( Dense( units = 256,activation = "relu"))
+    model.add( Dense( units = 11,activation = "softmax"))
     # create summary of model
     model.summary()
 
@@ -28,6 +29,7 @@ def create_model():
 
         
     return model
+
 
 
 #----------training with/without KFold cross validation-----------
@@ -102,7 +104,7 @@ def train_model(X,y,filepath,filename,k_fold = False,n_fold = 3,split = 0.15,sav
                                         )
             # make earlystopping as callbacks
             earlyStopping = EarlyStopping(monitor = "accuracy",
-                                          min_delta = 0.07,
+                                          min_delta = 0.005,
                                           patience = 5,
                                           verbose = 1,
                                           mode = "auto",
@@ -275,10 +277,10 @@ def predict(model_name_with_extension,test_image,plot_given_image = False):
     pre_process_image = preprocess(test_image)
     
     # make predictions of image
-    predictions = model.predict_classes(pre_process_image)
+    predictions = model.predict_classes(pre_process_image,verbose = 0)
     
     
-    predictions = np.argmax(predictions)
+    predictions = predictions[0]
     # print predicted digit
     print(f"Predicted Value--->{predictions}.")
     
