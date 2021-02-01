@@ -1,11 +1,12 @@
+
+# Import Packages
 import numpy as np
 import keras
 import tensorflow as tf
 import pandas as pd
 
-
+#-----------------------------------------------------
 def ydata(filename : str = ""):
-    import pandas as pd
     try:
         import keras
     except ModuleNotFoundError:
@@ -18,10 +19,8 @@ def ydata(filename : str = ""):
     y = keras.utils.to_categorical(y)
     
     return y
-
+#-----------------------------------------------------
 def Xdata(filename : str = ""):
-    import pandas as pd
-    
     X_data = pd.read_csv(filename)
     for i in X_data.columns:
         

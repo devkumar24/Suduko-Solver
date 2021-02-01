@@ -4,6 +4,8 @@ from keras.optimizers import Adam
 from sklearn.model_selection import KFold
 from keras.callbacks import EarlyStopping,ModelCheckpoint
 
+
+
 #------------------------------------Create Model-----------------------------------------
 def create_model():
     # Create CNN_model
@@ -29,10 +31,7 @@ def create_model():
 
         
     return model
-
-
-
-#----------training with/without KFold cross validation-----------
+#-------------------training with/without KFold cross validation--------------------------
 def train_model(X,y,filepath,filename,k_fold = False,n_fold = 3,split = 0.15,save_model = True):
     """
     Docstring: It takes an input X,y , X-> training set(it consist of images)
@@ -197,13 +196,9 @@ def train_model(X,y,filepath,filename,k_fold = False,n_fold = 3,split = 0.15,sav
         accuracy.append(testing_acc)
         
         # return all list history accuarcy and loss
-        return history,accuracy,loss
-    
-    
-#----------------------------This function create plot------------------------------- 
+        return history,accuracy,loss    
+#------------------------------This function create plot---------------------------------- 
 def plot(history,save_plots = False):
-    # import Library, if user forget to import it.
-    import matplotlib.pyplot as plt
     # as history contains many inside history, so we iterate it, if only len(history) > 1, because of k_fold.
     if len(history) > 1:
         
@@ -263,13 +258,8 @@ def plot(history,save_plots = False):
             
             if not save_plots:
                 plt.savefig("./evaluation/LossAndAccuracyPlot.png")
-            
-
-#-------------------------------Prediction function-----------------------------------
+#----------------------------------Prediction function------------------------------------
 def predict(model_name_with_extension,test_image,plot_given_image = False):
-    # oad important libraries
-    from keras.models import load_model
-    import numpy as np
     # load model for prediction
     model = load_model(model_name_with_extension)
     
@@ -291,3 +281,4 @@ def predict(model_name_with_extension,test_image,plot_given_image = False):
     else:
         return None
     
+#-----------------------------------------------------------------------------------------
