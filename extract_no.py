@@ -10,9 +10,8 @@ from keras.models import load_model
 
 
 # import other files
-import process_image
-import helper
-
+from processing_images import helper
+from processing_images import process_image
 
 #--------------------------------------------------------------------------------------------------
 def predict(image_grid,model_name = None):
@@ -43,7 +42,7 @@ def predict(image_grid,model_name = None):
     else:
         return "."
 #--------------------------------------------------------------------------------------------------
-def extract_number(digits,model_name = None):
+def extract_number(digit,model_name = None):
     """
     Docstring:
         This is the most important function because this function prediction of grid, and without 

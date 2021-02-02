@@ -1,2 +1,2 @@
-from .preprocessing_image import helper
-from .preprocessing_image import process_image
+from .helper import *
+from .process_image import *

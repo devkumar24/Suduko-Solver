@@ -5,7 +5,7 @@ import cv2
 import numpy as np
 
 # import other files
-import helper
+from processing_images import helper
 
 
 #-------------------------------------------------------------------------------------

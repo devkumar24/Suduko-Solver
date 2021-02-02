@@ -45,31 +45,31 @@ def show_image(image,image_title: str = ""):
     cv2.destroyAllWindows() # close the program
 #-------------------------------------------------------------------------------------------------------  
 def preprocess(image_path = None,save_image = False,dilate_image = False,filename : str = ""):
-	"""
-	Docstring:
-		It will read an image from the given path, and return an Image which is 
-		preprocessed by various methods.
-		Args:
-			1. image_path -> Path of the image
-			2. save_image -> Want to save to image, in case anyone copy image_path as URL's.
-			3. dilate_image -> If we want to make our image dilate, dilation of image means that 
-							   if particular pixel is mapped with a kernel, if result is 1, that
-							   means pixel is white and if result is 0, that means pixel is black.
-			4. filename -> It is string format, filename is the path + name_of_file + extension 
-						   (in which format user want to save image. **NOTE: .jpg is recommended). 
-						   It will save the image at that path.
+    """
+    Docstring:
+        It will read an image from the given path, and return an Image which is 
+        preprocessed by various methods.
+        Args:
+            1. image_path -> Path of the image
+            2. save_image -> Want to save to image, in case anyone copy image_path as URL's.
+            3. dilate_image -> If we want to make our image dilate, dilation of image means that 
+                               if particular pixel is mapped with a kernel, if result is 1, that
+                               means pixel is white and if result is 0, that means pixel is black.
+            4. filename -> It is string format, filename is the path + name_of_file + extension 
+                           (in which format user want to save image. **NOTE: .jpg is recommended). 
+                           It will save the image at that path.
 
-		Return:
-			It will return the image.
+        Return:
+            It will return the image.
 
-		Example:
-			image_path = "../images/before/puzzle.jpg"
-			pre_process_image = preprocess(image_path)
+        Example:
+            image_path = "../images/before/puzzle.jpg"
+            pre_process_image = preprocess(image_path)
 
-			**We have skip dilate_image arguement, because in the function we already bitwise_not
-			  and adaptiveThreshold like methods,so dilate_image, will not effect that much. 
-			  If we do dilate_image, then also there is no problem. 
-	"""
+            **We have skip dilate_image arguement, because in the function we already bitwise_not
+              and adaptiveThreshold like methods,so dilate_image, will not effect that much. 
+              If we do dilate_image, then also there is no problem. 
+    """
     # Read image using open-cv
     image = cv2.imread(image_path)
     # Make BGR image to GRAY Scale image
@@ -102,19 +102,19 @@ def preprocess(image_path = None,save_image = False,dilate_image = False,filenam
     return output_image
 #-------------------------------------------------------------------------------------------------------
 def GRAY_RGB_GRAY(image,GRAY_RGB = True):    
-	"""
-	This function will read a pre_processed image, and check the shape of image, 
-	if image has 2 channels i.e., GRAYSCALE image and convert to BGR image
-	and if image has 3 channels i.e., BGR image and convert to GRAYSCALE image.
+    """
+    This function will read a pre_processed image, and check the shape of image, 
+    if image has 2 channels i.e., GRAYSCALE image and convert to BGR image
+    and if image has 3 channels i.e., BGR image and convert to GRAYSCALE image.
 
-	Return the converted image
+    Return the converted image
 
-	Example:
-			image_path = "../images/before/puzzle.jpg"
-			pre_process_image = preprocess(image_path)
-			converted_image = GRAY_RGB_GRAY(pre_process_image)
-			show_image(converted_image)
-	"""
+    Example:
+            image_path = "../images/before/puzzle.jpg"
+            pre_process_image = preprocess(image_path)
+            converted_image = GRAY_RGB_GRAY(pre_process_image)
+            show_image(converted_image)
+    """
     if GRAY_RGB and (len(image.shape) == 2 or image.shape[2] == 1):
         image = cv2.cvtColor(image,cv2.COLOR_GRAY2BGR)
         return image
@@ -125,28 +125,28 @@ def GRAY_RGB_GRAY(image,GRAY_RGB = True):
 def findContours(image):
     """
     Docstring:
-    	Contours:
-		    Contours are defined as the line joining all the points along the boundary of an 
-		    image that are having the same intensity. Contours come handy in shape analysis, 
-		    finding the size of the object of interest, and object detection.
+        Contours:
+            Contours are defined as the line joining all the points along the boundary of an 
+            image that are having the same intensity. Contours come handy in shape analysis, 
+            finding the size of the object of interest, and object detection.
     Return:
-    	All the contours in the image
+        All the contours in the image
 
     Example:
-			image_path = "../images/before/puzzle.jpg"
-			pre_process_image = preprocess(image_path)
-			converted_image = GRAY_RGB_GRAY(pre_process_image)
-			contours = findContours(converted_image)
+            image_path = "../images/before/puzzle.jpg"
+            pre_process_image = preprocess(image_path)
+            converted_image = GRAY_RGB_GRAY(pre_process_image)
+            contours = findContours(converted_image)
     """
     contours,hierarchy = cv2.findContours(image,cv2.RETR_EXTERNAL,cv2.CHAIN_APPROX_SIMPLE)
     return contours
 #-------------------------------------------------------------------------------------------------------
 def plotContours(image,showImage = False):
     """
-	This Function will plot all contours present in the image, by plotting contours we will get to know
-	about the contour present across the suduko grid.
+    This Function will plot all contours present in the image, by plotting contours we will get to know
+    about the contour present across the suduko grid.
 
-	It will return points of contours.
+    It will return points of contours.
     """
     contours = findContours(image)
     image = GRAY_RGB_GRAY(image)
@@ -158,42 +158,42 @@ def plotContours(image,showImage = False):
     return drawContours
 #-------------------------------------------------------------------------------------------------------
 def cal_corners(image):
-	"""
-	This function will calculate the co-ordinates of suduko grid.
-	If we are finding contours of image, and we know that there must be the maximum contours in the 
-	image and with probability of 0.99 that msut be of suudko grid and in this function we will 
-	calculate the contours and find sorted them in decreasing order and get the biggest contour 
-	in the image.
+    """
+    This function will calculate the co-ordinates of suduko grid.
+    If we are finding contours of image, and we know that there must be the maximum contours in the 
+    image and with probability of 0.99 that msut be of suudko grid and in this function we will 
+    calculate the contours and find sorted them in decreasing order and get the biggest contour 
+    in the image.
 
-	There are several methods of finding the co-ordinates of suduko, but here I am discussing 2 methods.
-	Methods:
-		1.approxPolyDP
-			perimeter = cv2.arcLength(contour,True)
-			epilson = threshold*perimeter
-			co_ord = cv2.approxPolyDP(contour,epilson,True)
-		2.Ramer Doughlas Peucker algorithm
-
-
-
-	Return:
-		It will return a list of all 4 co-ordinates of bounding box of suduko grid
-
-			0 -> top_left corner
-			1 -> top_right corner
-			2 -> bottom_right corner
-			3 -> bottom_left corner
-
-	# 1.In approxPolyDP method we approximate the curve given the largest contour. We know that suduko grid 
-	#   is RECTANGLE, so there is high probabilty that largest 4 sided contour is our suduko grid.
-
-	#   Function:
-	#   	cv2.approxPolyDP(curve,epilson,closed[,approxCurve])
-
-	#   	curve -> The largest Contour
-	#   	epilson ->
+    There are several methods of finding the co-ordinates of suduko, but here I am discussing 2 methods.
+    Methods:
+        1.approxPolyDP
+            perimeter = cv2.arcLength(contour,True)
+            epilson = threshold*perimeter
+            co_ord = cv2.approxPolyDP(contour,epilson,True)
+        2.Ramer Doughlas Peucker algorithm
 
 
-	"""
+
+    Return:
+        It will return a list of all 4 co-ordinates of bounding box of suduko grid
+
+            0 -> top_left corner
+            1 -> top_right corner
+            2 -> bottom_right corner
+            3 -> bottom_left corner
+
+    # 1.In approxPolyDP method we approximate the curve given the largest contour. We know that suduko grid 
+    #   is RECTANGLE, so there is high probabilty that largest 4 sided contour is our suduko grid.
+
+    #   Function:
+    #   	cv2.approxPolyDP(curve,epilson,closed[,approxCurve])
+
+    #   	curve -> The largest Contour
+    #   	epilson ->
+
+
+    """
     import operator
     
     contours = findContours(image)
@@ -210,9 +210,9 @@ def cal_corners(image):
     return [ for_largest[top_l][0],for_largest[top_r][0],for_largest[bottom_r][0],for_largest[bottom_l][0] ]
 #-------------------------------------------------------------------------------------------------------
 def display_points(image,radius = 10, showImage=False):
-	"""
-	This Function will display all 4 co-ordinates calculated in cal_corners function
-	"""
+    """
+    This Function will display all 4 co-ordinates calculated in cal_corners function
+    """
     corners = cal_corners(image)
     image = GRAY_RGB_GRAY(image)
     points = list()
@@ -243,37 +243,37 @@ def find_largest_polygon(image,threshold = 0.1,n = 4):
         return contours[0]  
 #-------------------------------------------------------------------------------------------------------
 def distance(p1,p2):
-	"""
-	This function will calculate distance between 2 points (p1,p2)
-	p1 = (x1,y1)
-	p2 = (x2,y2)
+    """
+    This function will calculate distance between 2 points (p1,p2)
+    p1 = (x1,y1)
+    p2 = (x2,y2)
 
-	Distance Formula:
-		distance = ( ( (x1-x2)**2 ) + ( (y1-y2)**2 ) )**0.5
-	"""
+    Distance Formula:
+        distance = ( ( (x1-x2)**2 ) + ( (y1-y2)**2 ) )**0.5
+    """
     return (np.sum((p1-p2)**2)**0.5)
 #-------------------------------------------------------------------------------------------------------
 def crop_image(image):
-	"""
-	Docstring:
-		This function will crop the pre_process_image, and get the suduko grid. Firstly, 
-		the pre processed image is passed, and by using findContour Function we find the contours,
-		then using that contours we will calculate corners of suduko grid, and  around the corners
-		we crop our image and finally we get the cropped image i.e., Suduko Grid.
-	Args:
-		image -> This is a pre_processed image
+    """
+    Docstring:
+        This function will crop the pre_process_image, and get the suduko grid. Firstly, 
+        the pre processed image is passed, and by using findContour Function we find the contours,
+        then using that contours we will calculate corners of suduko grid, and  around the corners
+        we crop our image and finally we get the cropped image i.e., Suduko Grid.
+    Args:
+        image -> This is a pre_processed image
 
-	Return:
-		Image, which is cropped image of pre_processed image and cropped image contains Suduko Grid.
+    Return:
+        Image, which is cropped image of pre_processed image and cropped image contains Suduko Grid.
 
-	Example:
-		Example:
-			image_path = "../images/before/puzzle.jpg"
-			pre_process_image = preprocess(image_path)
-			cropped_image = crop_image(pre_process_image)
-			show_image(cropped_image)
-	
-	"""
+    Example:
+        Example:
+            image_path = "../images/before/puzzle.jpg"
+            pre_process_image = preprocess(image_path)
+            cropped_image = crop_image(pre_process_image)
+            show_image(cropped_image)
+    
+    """
     corners = cal_corners(image)
     
     top_l,top_r,bottom_r,bottom_l = corners
@@ -288,22 +288,22 @@ def crop_image(image):
     return get
 #-------------------------------------------------------------------------------------------------------
 def grid_box(image,threshold = 5):
-	"""
-	Docstring:
-		This function is calculating co-ordinates of grid of suduko.
-		It means that suduko grid has 81 boxes inside i.e., 9 rows and 9 columns. It will calculate the
-		the co-ordinates of each grid(square box that contains suduko number or blank image).
-		It will return the co-ordinates of each grid.
+    """
+    Docstring:
+        This function is calculating co-ordinates of grid of suduko.
+        It means that suduko grid has 81 boxes inside i.e., 9 rows and 9 columns. It will calculate the
+        the co-ordinates of each grid(square box that contains suduko number or blank image).
+        It will return the co-ordinates of each grid.
 
-	Args:
-		image -> It takes cropped image as an input.
-		threshold -> How much co-ordinates increased by, to avoid noise.
+    Args:
+        image -> It takes cropped image as an input.
+        threshold -> How much co-ordinates increased by, to avoid noise.
 
-	Return;
-		It will return boxes i.e., tuple of points (p1,p2).
-		The length of boxes will be 81 because there are 9 rows and 9 columns in suduko puzzle.
-		These points (p1,p2) of every grid represent top_left ad bottom_right corner of grid repectively.
-	"""
+    Return;
+        It will return boxes i.e., tuple of points (p1,p2).
+        The length of boxes will be 81 because there are 9 rows and 9 columns in suduko puzzle.
+        These points (p1,p2) of every grid represent top_left ad bottom_right corner of grid repectively.
+    """
     shape = image.shape[0]
     size = int(shape/9)
     
@@ -316,19 +316,19 @@ def grid_box(image,threshold = 5):
     return boxes # return top_left and bottom_right co-ordinates
 #-------------------------------------------------------------------------------------------------------
 def display_grid_box_points(image,radius = 5,color = (226,0,255),showImage = False):
-	"""
-	Docstring:
-		This function plots the points of every grid.
-	Args:
-		image -> Take input as cropped image.
-		radius -> Plotted points are in shape of circle and circle had radius, so it is the radius 
-				  of point.
-		color -> color of point, it can be tuple of ints or ints.
-		showImage -> bool value, if True it will show the points. 
+    """
+    Docstring:
+        This function plots the points of every grid.
+    Args:
+        image -> Take input as cropped image.
+        radius -> Plotted points are in shape of circle and circle had radius, so it is the radius 
+                  of point.
+        color -> color of point, it can be tuple of ints or ints.
+        showImage -> bool value, if True it will show the points. 
 
-	Return:
-		Return an numpy.ndarray of image that contains points.
-	"""
+    Return:
+        Return an numpy.ndarray of image that contains points.
+    """
     image = crop_image(image)
     points = grid_box(image)
     
@@ -343,22 +343,22 @@ def display_grid_box_points(image,radius = 5,color = (226,0,255),showImage = Fal
     return image
 #-------------------------------------------------------------------------------------------------------
 def crop_boxes(image,boxes):
-	"""
-	This Function will crop the grid within the points
-	"""
+    """
+    This Function will crop the grid within the points
+    """
     return image[boxes[0][1]:boxes[1][1], boxes[0][0]:boxes[1][0]]
 #-------------------------------------------------------------------------------------------------------
 def display_grid_boxes(image,boxes,thickness = 5,showImage = False,colour = (128,255,26)):
     """
-	This function makes rectnale boxes around the each suduko grid
-	Args:
-		image -> Take cropped image as an input.
-		boxes -> The co-ordinate of each square grid
-		thickness -> the thickness of bounding box i.e., Rectangle around each square grid
-		color -> color of rectangle box.
+    This function makes rectnale boxes around the each suduko grid
+    Args:
+        image -> Take cropped image as an input.
+        boxes -> The co-ordinate of each square grid
+        thickness -> the thickness of bounding box i.e., Rectangle around each square grid
+        color -> color of rectangle box.
 
-	Return:
-		It will return numpy.ndarray of image which contains the rectangle boxes.
+    Return:
+        It will return numpy.ndarray of image which contains the rectangle boxes.
     """
     image = GRAY_RGB_GRAY(image)
     for rect in boxes:
@@ -414,7 +414,7 @@ def feature(image,top_l = None,bottom_r = None):
         bottom_r = [height,width]
         
     total_area = 0.
-    seed = (None,None)_
+    seed = (None,None)
     for w in range(top_l[0],bottom_r[0]):
         for h in range(top_l[1],bottom_r[1]):
             if image[h,w] == 255 and w<width and h<height:
@@ -451,19 +451,19 @@ def feature(image,top_l = None,bottom_r = None):
     return image, np.array(box, dtype='int64'), seed
 #-------------------------------------------------------------------------------------------------------
 def extract_digit(image, boxes, size):
-	"""
-	Docstring:
-		This function takes input as cropped image, and return the particular rectangle grid of
-		particular size.
+    """
+    Docstring:
+        This function takes input as cropped image, and return the particular rectangle grid of
+        particular size.
 
-	Args:
-		image -> Cropped Image
-		boxes -> co-ordinates of that particular rectangular grid
-		size -> size of image, Recommended to be (28,28) as per MNIST dataset.
+    Args:
+        image -> Cropped Image
+        boxes -> co-ordinates of that particular rectangular grid
+        size -> size of image, Recommended to be (28,28) as per MNIST dataset.
 
-	Return:
-		It will return the image of that particular grid.
-	"""
+    Return:
+        It will return the image of that particular grid.
+    """
     digit = crop_boxes(image, boxes) 
 
     height, width = digit.shape
@@ -482,18 +482,18 @@ def extract_digit(image, boxes, size):
         return np.zeros((size, size), np.uint8)
 #-------------------------------------------------------------------------------------------------------
 def get_digit(image,boxes,size):
-	"""
-	Docstring:
-		This function will make a list of all 81 rectangular grid, based on cropped image.
+    """
+    Docstring:
+        This function will make a list of all 81 rectangular grid, based on cropped image.
 
-	Args:
-		image -> Cropped Image
-		boxes -> co-ordinates of that particular rectangular grid
-		size -> size of image, Recommended to be (28,28) as per MNIST dataset.
+    Args:
+        image -> Cropped Image
+        boxes -> co-ordinates of that particular rectangular grid
+        size -> size of image, Recommended to be (28,28) as per MNIST dataset.
 
-	Return:
-		It will return the list of all 81 images that are of shape (size,size).
-	"""
+    Return:
+        It will return the list of all 81 images that are of shape (size,size).
+    """
     images = []
     
     for box in boxes:
