@@ -8,17 +8,28 @@ import time
 image_path = "./images/before/sudoku-puzzle-863979.jpg"
 model_path = "./model/best_model/digit_classifier1.h5"
 
-def get_sol(image_path : str = "",model_path : str = "",showGrid = True):
-    digit = pre_process_images(image_path)
-    grid = extract_no.extract_number(digit,model_path)
-    if showGrid:
-        displayBoard(grid)
-#     grid = extract_no.save_grid(grid,filename="./puzzles.txt")
-    suduko = suduko_solver.Suduko(filename="./puzzles.txt")
-    suduko.solve_suduko()
-    solve_grid = suduko.solved_grid
-    
-    return grid,solve_grid
+def get_sol(image_path = None,model_path = None,showGrid = True):
+    if image_path is None or model_path is None:
+        suduko = suduko_solver.Suduko(filename="./puzzles.txt")
+        suduko.solve_suduko()
+        grid = suduko.grid
+        if showGrid:
+            displayBoard(grid)
+        solve_grid = suduko.solved_grid
+
+        return solve_grid
+    else:
+        
+        digit = pre_process_images(image_path)
+        grid = extract_no.extract_number(digit,model_path)
+        if showGrid:
+            displayBoard(grid)
+        grid = extract_no.save_grid(grid,filename="./puzzles.txt")
+        suduko = suduko_solver.Suduko(filename="./puzzles.txt")
+        suduko.solve_suduko()
+        solve_grid = suduko.solved_grid
+
+        return solve_grid
 
 def displayBoard(sudoku):
     for i in range(9):
@@ -44,7 +55,7 @@ if __name__ == '__main__':
     try:
         start = time.time()
 
-        grid,solved_grid = get_sol(image_path,model_path)
+        solved_grid = get_sol(image_path,model_path)
         solved_grid = np.array(solved_grid)
         end = time.time()
         
@@ -52,6 +63,7 @@ if __name__ == '__main__':
             print("""Suduko Puzzle has can't be solved due to some unwanted values present in GRID.""")
         else:
             displayBoard(solved_grid)
+#             print(solved_grid)
         print(int(end - start),"Seconds")
         
     except:
